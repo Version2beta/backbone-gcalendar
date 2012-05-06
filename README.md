@@ -211,9 +211,3 @@ Model:
 			* end (datetime)
 * groups (not supported in this version)
 
-## Google Calendar v3.0 API calls of interest
-
-
-API calls of interest:
-
-
