@@ -4,6 +4,8 @@ Google Calendar synch for Backbone
 
 This is a simple module to replace Backbone.sync with persistence of calendar-specific objects to Google Calendar.
 
+Base URL is https://www.googleapis.com/calendar/v3/.
+
 ## Collections and models
 
 ### ACLs (Collection) and ACL (Model)
@@ -16,6 +18,8 @@ ACLs:
 * ``acl.list`` Returns the rules in the access control list for the calendar. ``GET https://www.googleapis.com/calendar/v3/calendars/{calendarId}/acl``
 * ``acl.patch`` Updates an access control rule. ``PATCH https://www.googleapis.com/calendar/v3/calendars/{calendarId}/acl/{ruleId}``
 * ``acl.update`` Updates an access control rule. ``PUT https://www.googleapis.com/calendar/v3/calendars/{calendarId}/acl/{ruleId}``
+
+Model:
 
 * kind (string)
 * etag (string - etag)
@@ -32,6 +36,8 @@ Settings:
 * ``settings.get`` Returns a single user setting. ``GET https://www.googleapis.com/calendar/v3/users/me/settings/{setting}``
 * ``settings.list`` Returns all user settings for the authenticated user. ``GET https://www.googleapis.com/calendar/v3/users/me/settings``
 
+Model:
+
 * kind (string)
 * etag (string - etag)
 * id (string)
@@ -43,6 +49,8 @@ CalendarColors:
 
 * ``colors.get`` Returns the color definitions for calendars and events. ``GET https://www.googleapis.com/calendar/v3/colors``
 
+Model:
+
 * (key) (Maps to Calendar.colorId)
 	* background (string)
 	* foreground (string)
@@ -52,6 +60,8 @@ CalendarColors:
 EventColors:
 
 * ``colors.get`` Returns the color definitions for calendars and events. ``GET https://www.googleapis.com/calendar/v3/colors``
+
+Model:
 
 * (key) (Maps to Event.colorId)
 	* background (string)
@@ -72,6 +82,8 @@ Calendars:
 * ``calendars.insert`` Creates a secondary calendar. ``POST https://www.googleapis.com/calendar/v3/calendars``
 * ``calendars.patch`` Updates metadata for a calendar. ``PATCH https://www.googleapis.com/calendar/v3/calendars/{calendarId}``
 * ``calendars.update`` Updates metadata for a calendar. ``PUT https://www.googleapis.com/calendar/v3/calendars/{calendarId}``
+
+Model:
 
 * kind (string)
 * etag (string - etag)
@@ -102,7 +114,8 @@ Events:
 * ``events.patch`` Updates an event. This method supports patch semantics. ``PATCH https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events/{eventId}``
 * ``events.quickAdd`` Creates an event based on a simple text string. ``POST https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events/quickAdd``
 * ``events.update`` Updates an event. ``PUT https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events/{eventId}``
-* ``freebusy.query`` Returns free/busy information for a set of calendars. ``POST https://www.googleapis.com/calendar/v3/freeBusy``
+
+Model:
 
 * kind (string)
 * etag (string - etag)
@@ -179,6 +192,12 @@ Events:
 
 ### Busys (Collection) and Busy (Model)
 
+Busys:
+
+* ``freebusy.query`` Returns free/busy information for a set of calendars. ``POST https://www.googleapis.com/calendar/v3/freeBusy``
+
+Model:
+
 * kind (string)
 * timeMin (datetime)
 * timeMax (datetime)
@@ -194,7 +213,6 @@ Events:
 
 ## Google Calendar v3.0 API calls of interest
 
-Base URL is https://www.googleapis.com/calendar/v3/.
 
 API calls of interest:
 
