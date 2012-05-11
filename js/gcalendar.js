@@ -14,12 +14,12 @@ gcalendar.authorize = (function() {
 	};
 	gapi.auth.authorize(config, function() {
 		console.log('login complete');
-		console.log(gapi.auth.getToken());
+		gcalendar.token = gapi.auth.getToken();
 	});
 });
 
 // ACLs
-gcalendar.model.Acl = Backbone.Model.extend({
+gcalendar.model.Acl = gcalendar.Acl = Backbone.Model.extend({
 	defaults: {
 		role: 'owner',
 		scope: 'default'
@@ -57,6 +57,21 @@ gcalendar.collection.aclSync = (function(method, model, options) {
 	
 })();
 
-gcalendar.collection.Acls = Backbone.Collection.extend({
+gcalendar.collection.Acls = gcalendar.Acls = Backbone.Collection.extend({
 	model: gcalendar.model.Acl,
+	url: function() {
+		// Expects options.calendarID
+		return 'https://www.googleapis.com/calendar/v3/calendars/' + escape(options.calendarID)  + '/acl'
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		var response = $.ajax(params);
+		return response.items;
+	}
 });

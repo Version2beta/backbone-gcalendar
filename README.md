@@ -2,9 +2,7 @@
 
 Google Calendar synch for Backbone
 
-This is a simple module to replace Backbone.sync with persistence of calendar-specific objects to Google Calendar.
-
-Base URL is https://www.googleapis.com/calendar/v3/.
+This is a simple module to replace Backbone.sync with persistence of calendar-specific objects to Google Calendar. Besides Backbone 0.92 and it's dependencies, backbone-gcalendar also relies on Google's standard javascript client library at https://apis.google.com/js/client.js, and benefits from liberal alternating doses of caffeine and alcohol.
 
 ## Collections and models
 
