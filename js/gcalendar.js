@@ -108,3 +108,76 @@ gcalendar.collection.Settings = gcalendar.Settings = Backbone.Collection.extend(
 		return r.items;
 	}
 });
+
+// TODO: CalendarColors
+// TODO: EventColors
+
+gcalendar.model.Calendar = gcalendar.Calendar = Backbone.Model.extend({
+	initialize: function() {
+		console.log('Calendar initialized.');
+		this.on("error", function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	},
+});
+
+
+gcalendar.collection.Calendars = gcalendar.Calendars = Backbone.Collection.extend({
+	model: gcalendar.model.Calendar,
+	url: function() {
+		return 'https://www.googleapis.com/calendar/v3/users/me/calendarList';
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		console.log(r);
+		return r.items;
+	}
+});
+
+gcalendar.model.Event = gcalendar.Event = Backbone.Model.extend({
+	initialize: function() {
+		console.log('Event initialized.');
+		this.on("error", function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	},
+});
+
+
+gcalendar.collection.Events = gcalendar.Events = Backbone.Collection.extend({
+	model: gcalendar.model.Event,
+	url: function() {
+		// Expects options.calendarID
+		return 'https://www.googleapis.com/calendar/v3/calendars/' + escape(options.calendarID)  + '/events'
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		console.log(r);
+		return r.items;
+	}
+});
+
