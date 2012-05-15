@@ -53,10 +53,6 @@ gcalendar.model.Acl = gcalendar.Acl = Backbone.Model.extend({
 	}
 });
 
-gcalendar.collection.aclSync = (function(method, model, options) {
-	
-})();
-
 gcalendar.collection.Acls = gcalendar.Acls = Backbone.Collection.extend({
 	model: gcalendar.model.Acl,
 	url: function() {
@@ -71,7 +67,10 @@ gcalendar.collection.Acls = gcalendar.Acls = Backbone.Collection.extend({
 			url: that.url() + '?access_token=' + gcalendar.token.access_token,
 			processData: false
 		}, options);
-		var response = $.ajax(params);
-		return response.items;
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		console.log(r);
+		return r.items;
 	}
 });
