@@ -74,3 +74,37 @@ gcalendar.collection.Acls = gcalendar.Acls = Backbone.Collection.extend({
 		return r.items;
 	}
 });
+
+gcalendar.model.Setting = gcalendar.Setting = Backbone.Model.extend({
+	initialize: function() {
+		console.log('Setting initialized.');
+		this.on("error", function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	},
+});
+
+
+gcalendar.collection.Settings = gcalendar.Settings = Backbone.Collection.extend({
+	model: gcalendar.model.Setting,
+	url: function() {
+		return 'https://www.googleapis.com/calendar/v3/users/me/settings';
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		console.log(r);
+		return r.items;
+	}
+});
