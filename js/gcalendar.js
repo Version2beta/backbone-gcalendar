@@ -109,8 +109,77 @@ gcalendar.collection.Settings = gcalendar.Settings = Backbone.Collection.extend(
 	}
 });
 
-// TODO: CalendarColors
-// TODO: EventColors
+gcalendar.model.CalendarColor = gcalendar.CalendarColor = Backbone.Model.extend({
+	initialize: function() {
+		console.log('CalendarColor initialized.');
+		this.on('error', function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	}
+});
+
+gcalendar.collection.CalendarColors = gcalendar.CalendarColors = Backbone.Collection.extend({
+	model: gcalendar.model.CalendarColor,
+	url: function() {
+		return 'https://www.googleapis.com/calendar/v3/colors';
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		var colors = [];
+		_.each(r.calendar, function(v, k, l) {
+			colors.push( _.extend({ id: k }, v) );
+		});
+		return colors;
+	}
+});
+
+gcalendar.model.EventColor = gcalendar.EventColor = Backbone.Model.extend({
+	initialize: function() {
+		console.log('EventColor initialized.');
+		this.on('error', function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	}
+});
+
+gcalendar.collection.EventColors = gcalendar.EventColors = Backbone.Collection.extend({
+	model: gcalendar.model.EventColor,
+	url: function() {
+		return 'https://www.googleapis.com/calendar/v3/colors';
+	},
+	sync: function(method, model, options) {
+		var that = this;
+		var params = _.extend({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			processData: false
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		var colors = [];
+		_.each(r.event, function(v, k, l) {
+			colors.push( _.extend({ id: k }, v) );
+		});
+		return colors;
+	}
+});
 
 gcalendar.model.Calendar = gcalendar.Calendar = Backbone.Model.extend({
 	initialize: function() {
@@ -181,3 +250,41 @@ gcalendar.collection.Events = gcalendar.Events = Backbone.Collection.extend({
 	}
 });
 
+gcalendar.model.Busy = gcalendar.Busy = Backbone.Model.extend({
+	initialize: function() {
+		console.log('Busy initialized.');
+		this.on("error", function(model, error) {
+			console.log(error);
+		});
+	},
+	clear: function() {
+		this.destroy();
+	},
+});
+
+
+gcalendar.collection.Busys = gcalendar.Busys = Backbone.Collection.extend({
+	model: gcalendar.model.Busy,
+	url: function() {
+		return 'https://www.googleapis.com/calendar/v3/freeBusy';
+	},
+	sync: function(method, model, options) {
+		// Expects options.timeMin, options.timeMax, options.calendars
+		var that = this;
+		var params = _.extend({
+			type: 'POST',
+			dataType: 'jsonp',
+			url: that.url() + '?access_token=' + gcalendar.token.access_token,
+			//data: {
+			//	timeMin: options.timeMin,
+			//	timeMax: options.timeMax,
+			//	items: options.calendars
+			//}
+		}, options);
+		return $.ajax(params);
+	},
+	parse: function(r) {
+		console.log(r);
+		return r.busy;
+	}
+});
