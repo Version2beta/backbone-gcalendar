@@ -10,8 +10,10 @@ gcalendar.view = gcalendar.view || {};
 gcalendar.authorize = (function() {
 	var config = {
 		scope: 'https://www.googleapis.com/auth/calendar',
-		client_id: '1039557023142.apps.googleusercontent.com'
+		client_id: '1039557023142.apps.googleusercontent.com',
 	};
+	// Not sure I want this yet
+	gapi.client.load('calendar', 'v3', function() { console.log('Calendar API library loaded.'); });
 	gapi.auth.authorize(config, function() {
 		console.log('login complete');
 		gcalendar.token = gapi.auth.getToken();
@@ -268,23 +270,30 @@ gcalendar.collection.Busys = gcalendar.Busys = Backbone.Collection.extend({
 	url: function() {
 		return 'https://www.googleapis.com/calendar/v3/freeBusy';
 	},
-	sync: function(method, model, options) {
-		// Expects options.timeMin, options.timeMax, options.calendars
-		var that = this;
-		var params = _.extend({
-			type: 'POST',
-			dataType: 'jsonp',
-			url: that.url() + '?access_token=' + gcalendar.token.access_token,
-			//data: {
-			//	timeMin: options.timeMin,
-			//	timeMax: options.timeMax,
-			//	items: options.calendars
-			//}
-		}, options);
-		return $.ajax(params);
+	read: function(that, model, options) {
+		var data = {
+				timeMin: options.timeMin,
+				timeMax: options.timeMax,
+				items: [
+					{
+						id: options.calendar
+					}
+				]
+		};
+		var query = gapi.client.calendar.freebusy.query(data);
+		query.execute(function(r) {
+			var busys = [];
+			_.each(r.calendars, function(v, k, l) {
+				busys = busys.concat(v.busy);
+			});
+			that.add(busys);
+		});
+		return;
 	},
-	parse: function(r) {
-		console.log(r);
-		return r.busy;
+	sync: function(method, model, options) {
+		var that = this;
+		switch(method) {
+			case "read": return that.read(that, model, options); break;
+		}
 	}
 });
