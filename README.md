@@ -1,3 +1,7 @@
+**This project got dropped by my customer in the middle, and I didn't finish it. It's here, it's available, and it doesn't work.**
+
+**Sorry to get your hopes up. Not sure when or if I'll get back to it.**
+
 # backbone-gcalendar
 
 Google Calendar synch for Backbone
